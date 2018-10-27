@@ -1,1 +1,1 @@
-# bakerflow - the cleanest way to create BREAD in laravel
+# bakerflow - Neatly Create BREAD in Laravel
