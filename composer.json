@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Flamerecca\\Bakerflow\\": "src/Prettus/Repository/"
+            "Flamerecca\\Bakerflow\\": "src/"
         }
     },
     "autoload-dev": {

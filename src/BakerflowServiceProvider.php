@@ -6,16 +6,13 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Routing\Router;
 
-
 class BakerflowServiceProvider extends ServiceProvider
 {
-    public function register() {
-  
+    public function register()
+    {
     }
     
     public function boot(Router $router, Dispatcher $event)
     {
-    
     }
-  
 }
