@@ -1,6 +1,6 @@
 <?php
 
-namespace TCG\Voyager;
+namespace Flamerecca\Bakerflow;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher;
