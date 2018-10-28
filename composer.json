@@ -16,7 +16,8 @@
     ],
     "require": {
         "tcg/voyager": "~1.1",
-        "prettus/l5-repository": "~2.6"
+        "prettus/l5-repository": "~2.6",
+        "jenssegers/mongodb": "~3.4"
     },
     "require-dev": {
         "phpunit/phpcov": "~3.0|~4.0",
