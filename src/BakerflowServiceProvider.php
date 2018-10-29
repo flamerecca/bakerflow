@@ -36,16 +36,9 @@ class BakerflowServiceProvider extends ServiceProvider
             'bakerflow_assets' => [
                 "{$ingredientsPath}/assets/" => public_path(config('bakerflow.assets_path')),
             ],
-            'seeds' => [
-                "{$ingredientsPath}/seeders/" => database_path('seeds'),
-            ],
             'config' => [
                 "{$ingredientsPath}/config/bakerflow.php" => config_path('bakerflow.php'),
             ],
-            'traits' => [
-                "{$ingredientsPath}/traits/" => app()->path() . 'Traits/',
-            ],
-
         ];
 
         foreach ($ingredients as $group => $paths) {

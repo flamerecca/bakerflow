@@ -1,5 +1,5 @@
 <?php
-namespace Flamerecca\Bakerflow\Traits;
+namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
