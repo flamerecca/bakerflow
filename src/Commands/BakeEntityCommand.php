@@ -3,6 +3,7 @@
 namespace Flamerecca\Bakerflow\Commands;
 
 use File;
+use Flamerecca\Bakerflow\Generators\Generator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Generators\BindingsGenerator;
@@ -74,7 +75,7 @@ class BakeEntityCommand extends Command
     {
         if ($this->confirm('Would you like to create a Presenter? [y|N]')) {
             $this->call('make:presenter', [
-                'name'    => $this->argument('name'),
+                'name' => $this->argument('name'),
                 '--force' => $this->option('force'),
             ]);
         }
@@ -83,7 +84,8 @@ class BakeEntityCommand extends Command
     /**
      *
      */
-    private function confirmValidator(){
+    private function confirmValidator()
+    {
         $validator = $this->option('validator');
         if (is_null($validator) && $this->confirm('Would you like to create a Validator? [y|N]')) {
             $validator = 'yes';
@@ -91,7 +93,7 @@ class BakeEntityCommand extends Command
 
         if ($validator === 'yes') {
             $this->call('make:validator', [
-                'name'    => $this->argument('name'),
+                'name' => $this->argument('name'),
                 '--force' => $this->option('force'),
             ]);
         }
@@ -103,27 +105,36 @@ class BakeEntityCommand extends Command
     private function bakeBinding()
     {
         $provider = \File::get($this->getPath());
-        $repositoryInterface = $this->getRepository() . "::class";
-        $repositoryEloquent = $this->getEloquentRepository() . "::class";
-
-        // TODO use stud to create binding part
+        $content = $this->generateContent();
         \File::put(
             $this->getPath(),
             str_replace(
                 $this->bindPlaceholder,
-                "\$this->app->bind("
-                . PHP_EOL
-                . "            {$repositoryInterface},"
-                . PHP_EOL
-                . "            $repositoryEloquent"
-                . PHP_EOL
-                . '        );'
-                . PHP_EOL
-                . '        '
-                . $this->bindPlaceholder,
+                $content,
                 $provider
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    private function generateContent()
+    {
+
+        $repositoryInterface = $this->getRepository() . "::class";
+        $repositoryEloquent = $this->getEloquentRepository() . "::class";
+
+        $replaces = collect([
+            'REPOSITORY' => $repositoryInterface,
+            'ELOQUENT' => $repositoryEloquent,
+            'PLACEHOLDER' => $this->bindPlaceholder
+
+        ]);
+        return (new Generator(
+        __DIR__ . '/../../Ingredients/bindings/bindings.stub',
+            $replaces
+        ))->render();
     }
 
     /**

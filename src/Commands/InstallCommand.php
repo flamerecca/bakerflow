@@ -4,6 +4,7 @@ namespace Flamerecca\Bakerflow\Commands;
 
 use Flamerecca\Bakerflow\BakerflowServiceProvider;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Intervention\Image\ImageServiceProviderLaravel5;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,7 +62,7 @@ class InstallCommand extends Command
      * @param \Illuminate\Filesystem\Filesystem $filesystem
      *
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle(Filesystem $filesystem)
     {
@@ -96,6 +97,7 @@ class InstallCommand extends Command
     /**
      * Publishing useful traits
      * @param Filesystem $filesystem
+     * @throws FileNotFoundException
      */
     private function publishTraits(Filesystem $filesystem)
     {
