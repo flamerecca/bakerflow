@@ -16,10 +16,10 @@ use TCG\Voyager\Models\DataType;
 |
 */
 
-Route::group(['as' => 'voyager.'], function () {
+Route::group(['as' => 'bakerflow.'], function () {
     event(new Routing());
 
-    $namespacePrefix = '\\'.config('voyager.controllers.namespace').'\\';
+    $namespacePrefix = '\\'.config('bakerflow.controllers.namespace').'\\';
 
     Route::get('login', ['uses' => $namespacePrefix.'VoyagerAuthController@login',     'as' => 'login']);
     Route::post('login', ['uses' => $namespacePrefix.'VoyagerAuthController@postLogin', 'as' => 'postlogin']);

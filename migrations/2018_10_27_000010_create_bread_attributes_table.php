@@ -19,6 +19,7 @@ class CreateBreadAttributesTable extends Migration
             $table->string('attribute');
             $table->string('type');
             $table->boolean('required')->default(false);
+            $table->text('example')->nullable();
             $table->text('details')->nullable();
             $table->timestamps();
         });
