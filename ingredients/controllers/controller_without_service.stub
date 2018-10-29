@@ -1,41 +1,41 @@
 <?php
 
-$NAMESPACE$
+{{NAMESPACE}}
 
 use Illuminate\Http\Request;
 
-use $APPNAME$Http\Requests;
+use {{APPNAME}}Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use $APPNAME$Http\Requests\$CLASS$CreateRequest;
-use $APPNAME$Http\Requests\$CLASS$UpdateRequest;
+use {{APPNAME}}Http\Requests\$CLASS$CreateRequest;
+use {{APPNAME}}Http\Requests\$CLASS$UpdateRequest;
 $REPOSITORY$
 $VALIDATOR$
 
 /**
- * Class $CONTROLLER$Controller.
+ * Class {{CONTROLLER}}Controller.
  *
- * @package $NAMESPACE$
+ * @package {{NAMESPACE}}
  */
-class $CONTROLLER$Controller extends Controller
+class {{CONTROLLER}}Controller extends Controller
 {
     /**
-     * @var $CLASS$Repository
+     * @var {{CLASS}}Repository
      */
     protected $repository;
 
     /**
-     * @var $CLASS$Validator
+     * @var {{CLASS}}Validator
      */
     protected $validator;
 
     /**
-     * $CONTROLLER$Controller constructor.
+     * {{CONTROLLER}}Controller constructor.
      *
-     * @param $CLASS$Repository $repository
-     * @param $CLASS$Validator $validator
+     * @param {{CLASS}}Repository $repository
+     * @param {{CLASS}}Validator $validator
      */
-    public function __construct($CLASS$Repository $repository, $CLASS$Validator $validator)
+    public function __construct({{CLASS}}Repository $repository, {{CLASS}}Validator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -49,22 +49,22 @@ class $CONTROLLER$Controller extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $$PLURAL$ = $this->repository->all();
+        ${{PLURAL}} = $this->repository->all();
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $$PLURAL$,
+                'data' => ${{PLURAL}},
             ]);
         }
 
-        return view('$PLURAL$.index', compact('$PLURAL$'));
+        return view('${{PLURAL}}.index', compact('{{PLURAL}}'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  $CLASS$CreateRequest $request
+     * @param {{CLASS}}CreateRequest $request
      *
      * @return \Illuminate\Http\Response
      *
@@ -76,11 +76,11 @@ class $CONTROLLER$Controller extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $$SINGULAR$ = $this->repository->create($request->all());
+            ${{SINGULAR}} = $this->repository->create($request->all());
 
             $response = [
                 'message' => '$CLASS$ created.',
-                'data'    => $$SINGULAR$->toArray(),
+                'data'    => ${{SINGULAR}}->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -104,43 +104,43 @@ class $CONTROLLER$Controller extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $$SINGULAR$ = $this->repository->find($id);
+        ${{SINGULAR}} = $this->repository->find($id);
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $$SINGULAR$,
+                'data' => ${{SINGULAR}},
             ]);
         }
 
-        return view('$PLURAL$.show', compact('$SINGULAR$'));
+        return view('{{PLURAL}}.show', compact('{{SINGULAR}}'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $$SINGULAR$ = $this->repository->find($id);
+        ${{SINGULAR}} = $this->repository->find($id);
 
-        return view('$PLURAL$.edit', compact('$SINGULAR$'));
+        return view('{{PLURAL}}.edit', compact('{{SINGULAR}}'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  $CLASS$UpdateRequest $request
-     * @param  string            $id
+     * @param {{CLASS}}UpdateRequest $request
+     * @param string $id
      *
      * @return Response
      *
@@ -152,11 +152,11 @@ class $CONTROLLER$Controller extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $$SINGULAR$ = $this->repository->update($request->all(), $id);
+            ${{SINGULAR}} = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => '$CLASS$ updated.',
-                'data'    => $$SINGULAR$->toArray(),
+                'message' => '{{CLASS}} updated.',
+                'data'    => ${{SINGULAR}}->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -194,11 +194,11 @@ class $CONTROLLER$Controller extends Controller
         if (request()->wantsJson()) {
 
             return response()->json([
-                'message' => '$CLASS$ deleted.',
+                'message' => '{{CLASS}} deleted.',
                 'deleted' => $deleted,
             ]);
         }
 
-        return redirect()->back()->with('message', '$CLASS$ deleted.');
+        return redirect()->back()->with('message', '{{CLASS}} deleted.');
     }
 }

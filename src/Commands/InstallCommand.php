@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
 class InstallCommand extends Command
 {
 
-    protected $seedersPath = __DIR__.'/../../publishable/database/seeds/';
+    protected $seedersPath = __DIR__.'/../../ingredients/seeders/';
 
     /**
      * The console command name.
@@ -28,11 +28,12 @@ class InstallCommand extends Command
      */
     protected $description = 'Install Bakerflow package';
 
+    /**
+     * @return array
+     */
     protected function getOptions()
     {
-        return [
-            ['with-dummy', null, InputOption::VALUE_NONE, 'Install with dummy data', null],
-        ];
+        return [];
     }
 
     /**
@@ -64,45 +65,15 @@ class InstallCommand extends Command
      */
     public function handle(Filesystem $filesystem)
     {
-        $this->info('Publishing the Bakerflow assets, database, and config files');
+        $this->info('Publishing the Bakerflow assets, database, config files and traits');
         $this->publishAsset();
+
 
         $this->info('Migrating the database tables into your application');
         $this->call('migrate');
 
         $this->info('Dumping the autoloaded files and reloading all new files');
         $this->composerReload();
-
-        $this->info('Adding Voyager routes to routes/web.php');
-        $routes_contents = $filesystem->get(base_path('routes/web.php'));
-        if (false === strpos($routes_contents, 'Voyager::routes()')) {
-            $filesystem->append(
-                base_path('routes/web.php'),
-                "\n\nRoute::group(['prefix' => 'admin'], function () {\n    Voyager::routes();\n});\n"
-            );
-        }
-
-        \Route::group(['prefix' => 'admin'], function () {
-            \Voyager::routes();
-        });
-
-        $this->info('Seeding data into the database');
-        $this->seed('BakerflowDatabaseSeeder');
-
-        if ($this->option('with-dummy')) {
-            $this->info('Publishing dummy content');
-            $tags = ['dummy_seeds', 'dummy_content', 'dummy_config', 'dummy_migrations'];
-            $this->call('vendor:publish', ['--provider' => VoyagerDummyServiceProvider::class, '--tag' => $tags]);
-
-            $this->info('Migrating dummy tables');
-            $this->call('migrate');
-
-            $this->info('Seeding dummy data');
-            $this->seed('VoyagerDummyDatabaseSeeder');
-        } else {
-            $this->call('vendor:publish', ['--provider' => VoyagerServiceProvider::class, '--tag' => 'config']);
-        }
-
 
         $this->info('Adding the storage symlink to your public folder');
         $this->call('storage:link');
