@@ -30,22 +30,25 @@ class BakerflowServiceProvider extends ServiceProvider
      */
     private function registerPublishableResources()
     {
-        $publishablePath = dirname(__DIR__).'/publishable';
+        $ingredientsPath = dirname(__DIR__).'/ingredients';
 
-        $publishable = [
+        $ingredients = [
             'bakerflow_assets' => [
-                "{$publishablePath}/assets/" => public_path(config('bakerflow.assets_path')),
+                "{$ingredientsPath}/assets/" => public_path(config('bakerflow.assets_path')),
             ],
             'seeds' => [
-                "{$publishablePath}/database/seeds/" => database_path('seeds'),
+                "{$ingredientsPath}/seeders/" => database_path('seeds'),
             ],
             'config' => [
-                "{$publishablePath}/config/bakerflow.php" => config_path('bakerflow.php'),
+                "{$ingredientsPath}/config/bakerflow.php" => config_path('bakerflow.php'),
+            ],
+            'traits' => [
+                "{$ingredientsPath}/traits/" => app()->path() . 'Traits/',
             ],
 
         ];
 
-        foreach ($publishable as $group => $paths) {
+        foreach ($ingredients as $group => $paths) {
             $this->publishes($paths, $group);
         }
     }
