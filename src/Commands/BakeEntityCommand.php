@@ -91,12 +91,7 @@ class BakeEntityCommand extends Command
             return;
         }
 
-        $service = $this->confirm('Would you like to create a Service with this Controller? [y|N]');
-        if (!$service) {
-            $this->call('bakerflow:bake:controller', $this->arguments());
-            return;
-        }
-        $this->call('bakerflow:bake:controller-with-service', $this->arguments());
+        $this->call('bakerflow:bake:controller', $this->arguments());
         return;
     }
 

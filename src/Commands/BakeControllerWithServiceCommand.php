@@ -17,14 +17,14 @@ class BakeControllerWithServiceCommand extends Command
      *
      * @var string
      */
-    protected $name = 'bakerflow:bake:controller-with-service';
+    protected $name = 'bakerflow:bake:controller';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'bake Controller with service';
+    protected $description = 'bake Controller with Service';
 
     /**
      * The array of command arguments.
