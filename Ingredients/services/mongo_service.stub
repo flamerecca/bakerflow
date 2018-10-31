@@ -1,0 +1,71 @@
+<?php
+
+namespace {{NAMESPACE}};
+
+use Illuminate\Http\Request;
+use {{APPNAME}}Entities\{{CLASS}};
+
+/**
+ * Class {{CONTROLLER}}Service.
+ *
+ * @package {{NAMESPACE}}
+ */
+class {{CONTROLLER}}Service
+{
+    /**
+     * {{CONTROLLER}}Service constructor.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function all()
+    {
+        ${{PLURAL}} = {{CLASS}}::all();
+        return ${{PLURAL}};
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function get(Request $request)
+    {
+        return {{CLASS}}::find($request->route('id'));
+    }
+
+    /**
+     * @return mixed
+     * @throws ValidatorException
+     */
+    public function add(Request $request)
+    {
+        ${{SINGULAR}} = {{CLASS}}::create($request->all());
+        return ${{SINGULAR}};
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function modify(Request $request)
+    {
+        ${{SINGULAR}} = {{CLASS}}::find($request->route('id'));
+        ${{SINGULAR}}->update($request->all());
+        return ${{SINGULAR}};
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function delete(Request $request)
+    {
+        ${{SINGULAR}} = {{CLASS}}::find($request->route('id'));
+        ${{SINGULAR}}->delete();
+        return ${{SINGULAR}};
+    }
+}

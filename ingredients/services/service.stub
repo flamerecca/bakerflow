@@ -47,8 +47,8 @@ class {{CONTROLLER}}Service
     public function all()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        ${{SINGULAR}} = $this->repository->all();
-        return ${{SINGULAR}};
+        ${{PLURAL}} = $this->repository->all();
+        return ${{PLURAL}};
     }
 
     /**
