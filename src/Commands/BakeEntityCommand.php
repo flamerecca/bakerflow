@@ -6,11 +6,14 @@ use File;
 use Flamerecca\Bakerflow\Generators\Generator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Generators\BindingsGenerator;
 use Flamerecca\Bakerflow\Exceptions\FileAlreadyExistsException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Class BakeEntityCommand
+ * @package Flamerecca\Bakerflow\Commands
+ */
 class BakeEntityCommand extends Command
 {
     /**
@@ -53,15 +56,9 @@ class BakeEntityCommand extends Command
     public function handle()
     {
         try {
-
             $this->confirmPresenter();
-            $this->confirmValidator();
-
             //create repository and repositoryEloquent by l5-command
-            $this->call('make:repository', $this->arguments());
-
-            $this->bakeBinding();
-
+            $this->confirmControllerAndService();
             $this->info('binding created successfully.');
         } catch (FileAlreadyExistsException $e) {
             $this->error('binding already exists!');
@@ -82,30 +79,34 @@ class BakeEntityCommand extends Command
     }
 
     /**
+     * make controller
      *
+     * Controller's structure depends on whether you want
+     * service or not.
      */
-    private function confirmValidator()
+    private function confirmControllerAndService()
     {
-        $validator = $this->option('validator');
-        if (is_null($validator) && $this->confirm('Would you like to create a Validator? [y|N]')) {
-            $validator = 'yes';
+        $controller = $this->confirm('Would you like to create a Controller? [y|N]');
+        if (!$controller) {
+            return;
         }
 
-        if ($validator === 'yes') {
-            $this->call('make:validator', [
-                'name' => $this->argument('name'),
-                '--force' => $this->option('force'),
-            ]);
+        $service = $this->confirm('Would you like to create a Service with this Controller? [y|N]');
+        if (!$service) {
+            $this->call('bakerflow:bake:controller', $this->arguments());
+            return;
         }
+        $this->call('bakerflow:bake:controller-with-service', $this->arguments());
+        return;
     }
 
     /**
-     *
+     * Handle repository and eloquent binding
      */
     private function bakeBinding()
     {
         $provider = \File::get($this->getPath());
-        $content = $this->generateContent();
+        $content = $this->generateBindingContent();
         \File::put(
             $this->getPath(),
             str_replace(
@@ -119,7 +120,7 @@ class BakeEntityCommand extends Command
     /**
      * @return string
      */
-    private function generateContent()
+    private function generateBindingContent()
     {
 
         $repositoryInterface = $this->getRepository() . "::class";
@@ -132,7 +133,7 @@ class BakeEntityCommand extends Command
 
         ]);
         return (new Generator(
-        __DIR__ . '/../../Ingredients/bindings/bindings.stub',
+            __DIR__ . '/../../Ingredients/bindings/bindings.stub',
             $replaces
         ))->render();
     }
@@ -193,7 +194,6 @@ class BakeEntityCommand extends Command
             ],
         ];
     }
-
 
     /**
      * The array of command options.

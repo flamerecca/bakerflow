@@ -17,6 +17,12 @@ class Generator
      */
     private $replaces;
 
+    /**
+     * Generator constructor.
+     *
+     * @param string $path
+     * @param Collection $replaces
+     */
     public function __construct(string $path, Collection $replaces)
     {
         $this->path = $path;
