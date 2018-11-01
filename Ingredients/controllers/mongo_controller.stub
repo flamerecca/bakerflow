@@ -49,7 +49,7 @@ class {{CONTROLLER}}Controller extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  {{CLASS}}CreateRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
@@ -85,7 +85,7 @@ class {{CONTROLLER}}Controller extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request): JsonResponse
