@@ -1,15 +1,13 @@
 <?php
 
-{{NAMESPACE}}
+namespace {{NAMESPACE}};
 
 use Illuminate\Http\Request;
-
-use {{APPNAME}}Http\Requests;
-use {{APPNAME}}Http\Requests\$CLASS$CreateRequest;
-use {{APPNAME}}Http\Requests\$CLASS$UpdateRequest;
+use {{APPNAME}}Http\Requests\{{CLASS}}CreateRequest;
+use {{APPNAME}}Http\Requests\{{CLASS}}UpdateRequest;
 use {{APPNAME}}Traits\HasJsonResponses;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
+use {{APPNAME}}Services\{{CONTROLLER}}Service;
+
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -22,16 +20,16 @@ class {{CONTROLLER}}Controller extends Controller
     use HasJsonResponses;
 
     /**
-     * @var {{CLASS}}Service
+     * @var {{CONTROLLER}}Service
      */
     protected $service;
 
     /**
-     * $CONTROLLER$Controller constructor.
+     * {{CONTROLLER}}Controller constructor.
      *
-     * @param {{CLASS}}Service $service
+     * @param {{CONTROLLER}}Service $service
      */
-    public function __construct({{CLASS}}Service $service)
+    public function __construct({{CONTROLLER}}Service $service)
     {
         $this->service = $service;
     }
@@ -45,7 +43,7 @@ class {{CONTROLLER}}Controller extends Controller
     {
         try {
             ${{PLURAL}} = $this->service->all();
-            return $this->returnSuccessJsonResponse($districts->toArray());
+            return $this->returnSuccessJsonResponse(${{PLURAL}}->toArray());
         } catch (\Exception $exception) {
             return $this->returnFailJsonResponse($exception);
         }
@@ -54,14 +52,17 @@ class {{CONTROLLER}}Controller extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  $CLASS$CreateRequest $request
+     * @param  {{CLASS}}CreateRequest $request
      * @return JsonResponse
      */
-    public function store({{CLASS}}CreateRequest $request)
+    public function store({{CLASS}}CreateRequest $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->add($request);
-            return $this->returnSuccessJsonResponse(${{SINGULAR}}->toArray(), trans('success.create', ['entity' => '{{SINGULAR}}']));
+            return $this->returnSuccessJsonResponse(
+                ${{SINGULAR}}->toArray(),
+                trans('success.create', ['entity' => '{{SINGULAR}}'])
+            );
         } catch (\Exception $exception) {
             return $this->returnFailJsonResponse($exception);
         }
@@ -70,31 +71,34 @@ class {{CONTROLLER}}Controller extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function show(Request $request)
+    public function show(Request $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->get($request);
-            return $this->returnSuccessJsonResponse($product);
-        } catch (\Exception $e) {
-            return $this->returnFailJsonResponse($e);
+            return $this->returnSuccessJsonResponse(${{SINGULAR}});
+        } catch (\Exception $exception) {
+            return $this->returnFailJsonResponse($exception);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  $CLASS$UpdateRequest $request
+     * @param  {{CLASS}}UpdateRequest $request
      * @return JsonResponse
      */
-    public function update($CLASS$UpdateRequest $request)
+    public function update({{CLASS}}UpdateRequest $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->modify($request);
-            return $this->returnSuccessJsonResponse(${{SINGULAR}}, trans('success.create', ['entity' => '{{SINGULAR}}']));
+            return $this->returnSuccessJsonResponse(
+                ${{SINGULAR}},
+                trans('success.create', ['entity' => '{{SINGULAR}}'])
+            );
         } catch (\Exception $exception) {
             return $this->returnFailJsonResponse($exception);
         }
@@ -106,11 +110,14 @@ class {{CONTROLLER}}Controller extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->delete($request);
-            return $this->returnSuccessJsonResponse($deleted, trans('success.delete', ['entity' => '{{SINGULAR}}']));
+            return $this->returnSuccessJsonResponse(
+                ${{SINGULAR}},
+                trans('success.delete', ['entity' => '{{SINGULAR}}'])
+            );
         } catch (\Exception $exception) {
             return $this->returnFailJsonResponse($exception);
         }

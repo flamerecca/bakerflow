@@ -4,6 +4,7 @@ namespace Flamerecca\Bakerflow\Commands;
 
 use Flamerecca\Bakerflow\BakerflowServiceProvider;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Intervention\Image\ImageServiceProviderLaravel5;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,18 +62,20 @@ class InstallCommand extends Command
      * @param \Illuminate\Filesystem\Filesystem $filesystem
      *
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle(Filesystem $filesystem)
     {
-        $this->info('Publishing the Bakerflow assets, database, config files and traits');
+        $this->info('Publishing the Bakerflow assets and config files');
         $this->publishAsset();
 
+        $this->info('Publishing useful traits');
+        $this->publishTraits($filesystem);
 
         $this->info('Migrating the database tables into your application');
         $this->call('migrate');
 
-        $this->info('Dumping the autoloaded files and reloading all new files');
+        $this->info('Dumping the autoload files and reloading all new files');
         $this->composerReload();
 
         $this->info('Adding the storage symlink to your public folder');
@@ -89,6 +92,22 @@ class InstallCommand extends Command
         $tags = ['bakerflow_assets', 'seeds'];
         $this->call('vendor:publish', ['--provider' => BakerflowServiceProvider::class, '--tag' => $tags]);
         $this->call('vendor:publish', ['--provider' => ImageServiceProviderLaravel5::class]);
+    }
+
+    /**
+     * Publishing useful traits
+     * @param Filesystem $filesystem
+     * @throws FileNotFoundException
+     */
+    private function publishTraits(Filesystem $filesystem)
+    {
+        if (!$filesystem->isDirectory(app()->path('Traits/'))) {
+            $filesystem->makeDirectory(app()->path('Traits/'));
+        }
+        $filesystem->put(
+            app()->path('Traits/') . 'HasJsonResponses.php',
+            $filesystem->get(dirname(__DIR__) . '/../ingredients/traits/HasJsonResponses.stub')
+        );
     }
 
     /**

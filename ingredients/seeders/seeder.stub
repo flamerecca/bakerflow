@@ -3,9 +3,9 @@
 use Illuminate\Database\Seeder;
 
 /**
- * Class $CLASS$.
+ * Class {{CLASS}}.
  */
-class $CLASS$ extends Seeder
+class {{CLASS}} extends Seeder
 {
     /**
      * Auto generated seed file.
@@ -14,6 +14,6 @@ class $CLASS$ extends Seeder
      */
     public function run()
     {
-$FIELDS$
+{{FIELDS}}
     }
 }

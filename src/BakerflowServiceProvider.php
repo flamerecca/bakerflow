@@ -11,7 +11,6 @@ class BakerflowServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->runningInConsole()) {
-            $this->registerPublishableResources();
             $this->registerConsoleCommands();
         }
     }
@@ -26,38 +25,13 @@ class BakerflowServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the publishable files.
-     */
-    private function registerPublishableResources()
-    {
-        $ingredientsPath = dirname(__DIR__).'/ingredients';
-
-        $ingredients = [
-            'bakerflow_assets' => [
-                "{$ingredientsPath}/assets/" => public_path(config('bakerflow.assets_path')),
-            ],
-            'seeds' => [
-                "{$ingredientsPath}/database/seeds/" => database_path('seeds'),
-            ],
-            'config' => [
-                "{$ingredientsPath}/config/bakerflow.php" => config_path('bakerflow.php'),
-            ],
-            'traits' => [
-                "{$ingredientsPath}/traits/" => 'app/traits/',
-            ],
-
-        ];
-
-        foreach ($ingredients as $group => $paths) {
-            $this->publishes($paths, $group);
-        }
-    }
-
-    /**
      * Register the commands accessible from the Console.
      */
     private function registerConsoleCommands()
     {
         $this->commands(Commands\InstallCommand::class);
+        $this->commands(Commands\BakeEntityCommand::class);
+        $this->commands(Commands\BakeControllerWithServiceCommand::class);
+        $this->commands(Commands\BakeMongoEntityCommand::class);
     }
 }
