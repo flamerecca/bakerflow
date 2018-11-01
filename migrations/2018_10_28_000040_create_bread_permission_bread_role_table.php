@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissionRoleTable extends Migration
+class CreateBreadPermissionBreadRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreatePermissionRoleTable extends Migration
             $table->foreign('bread_permission_id')->references('id')->on('bread_permissions')->onDelete('cascade');
             $table->integer('bread_role_id')->unsigned()->index();
             $table->foreign('bread_role_id')->references('id')->on('bread_roles')->onDelete('cascade');
-            $table->primary(['bread_permission_id', 'bread_role_id']);
+            $table->primary(['bread_permission_id', 'bread_role_id'], 'bread_permission_id_bread_role_id');
         });
     }
 
