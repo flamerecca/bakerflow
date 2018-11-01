@@ -31,11 +31,60 @@ class BakeEntityCommand extends Command
     protected $description = 'Bake a new entity';
 
     /**
-     * The placeholder for repository bindings
+     * The array of command arguments.
      *
-     * @var string
+     * @return array
      */
-    public $bindPlaceholder = '//:end-bindings:';
+    public function getArguments()
+    {
+        return [
+            [
+                'name',
+                InputArgument::REQUIRED,
+                'The name of model for which the controller is being generated.',
+                null
+            ],
+        ];
+    }
+
+    /**
+     * The array of command options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return [
+            [
+                'fillable',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The fillable attributes.',
+                null
+            ],
+            [
+                'rules',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The rules of validation attributes.',
+                null
+            ],
+            [
+                'validator',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Adds validator reference to the repository.',
+                null
+            ],
+            [
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'Force the creation if file already exists.',
+                null
+            ]
+        ];
+    }
 
     /**
      * Execute the command.
@@ -93,139 +142,5 @@ class BakeEntityCommand extends Command
 
         $this->call('bakerflow:bake:controller', $this->arguments());
         return;
-    }
-
-    /**
-     * Handle repository and eloquent binding
-     */
-    private function bakeBinding()
-    {
-        $provider = \File::get($this->getPath());
-        $content = $this->generateBindingContent();
-        \File::put(
-            $this->getPath(),
-            str_replace(
-                $this->bindPlaceholder,
-                $content,
-                $provider
-            )
-        );
-    }
-
-    /**
-     * @return string
-     */
-    private function generateBindingContent()
-    {
-
-        $repositoryInterface = $this->getRepository() . "::class";
-        $repositoryEloquent = $this->getEloquentRepository() . "::class";
-
-        $replaces = collect([
-            'REPOSITORY' => $repositoryInterface,
-            'ELOQUENT' => $repositoryEloquent,
-            'PLACEHOLDER' => $this->bindPlaceholder
-
-        ]);
-        return (new Generator(
-            __DIR__ . '/../../Ingredients/bindings/bindings.stub',
-            $replaces
-        ))->render();
-    }
-
-    /**
-     * Get destination path for generated file.
-     *
-     * @return string
-     */
-    private function getPath()
-    {
-        return app()->path() . '/Providers/RepositoryServiceProvider.php';
-    }
-
-    /**
-     * Gets repository full class name
-     *
-     * @return string
-     */
-    private function getRepository()
-    {
-        $repository = '\\App\\Repositories\\' . $this->argument('name');
-
-        return str_replace([
-                "\\",
-                '/'
-            ], '\\', $repository) . 'Repository';
-    }
-
-    /**
-     * Gets eloquent repository full class name
-     *
-     * @return string
-     */
-    private function getEloquentRepository()
-    {
-        $repository = '\\App\\Repositories\\' . $this->argument('name');
-
-        return str_replace([
-                "\\",
-                '/'
-            ], '\\', $repository) . 'RepositoryEloquent';
-    }
-
-    /**
-     * The array of command arguments.
-     *
-     * @return array
-     */
-    public function getArguments()
-    {
-        return [
-            [
-                'name',
-                InputArgument::REQUIRED,
-                'The name of model for which the controller is being generated.',
-                null
-            ],
-        ];
-    }
-
-    /**
-     * The array of command options.
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        return [
-            [
-                'fillable',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'The fillable attributes.',
-                null
-            ],
-            [
-                'rules',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'The rules of validation attributes.',
-                null
-            ],
-            [
-                'validator',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Adds validator reference to the repository.',
-                null
-            ],
-            [
-                'force',
-                'f',
-                InputOption::VALUE_NONE,
-                'Force the creation if file already exists.',
-                null
-            ]
-        ];
     }
 }

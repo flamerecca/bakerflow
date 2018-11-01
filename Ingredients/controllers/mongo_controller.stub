@@ -3,8 +3,6 @@
 namespace {{NAMESPACE}};
 
 use Illuminate\Http\Request;
-use {{APPNAME}}Http\Requests\{{CLASS}}CreateRequest;
-use {{APPNAME}}Http\Requests\{{CLASS}}UpdateRequest;
 use {{APPNAME}}Traits\HasJsonResponses;
 use {{APPNAME}}Services\{{CONTROLLER}}Service;
 use Illuminate\Http\JsonResponse;
@@ -54,7 +52,7 @@ class {{CONTROLLER}}Controller extends Controller
      * @param  {{CLASS}}CreateRequest $request
      * @return JsonResponse
      */
-    public function store({{CLASS}}CreateRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->add($request);
@@ -87,10 +85,10 @@ class {{CONTROLLER}}Controller extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  {{CLASS}}UpdateRequest $request
+     * @param  Request $request
      * @return JsonResponse
      */
-    public function update({{CLASS}}UpdateRequest $request): JsonResponse
+    public function update(Request $request): JsonResponse
     {
         try {
             ${{SINGULAR}} = $this->service->modify($request);

@@ -17,8 +17,8 @@ class CreatePermissionRoleTable extends Migration
             $table->integer('bread_permission_id')->unsigned()->index();
             $table->foreign('bread_permission_id')->references('id')->on('bread_permissions')->onDelete('cascade');
             $table->integer('bread_role_id')->unsigned()->index();
-            $table->foreign('bread_role_id')->references('id')->on('bread_permissions')->onDelete('cascade');
-            $table->primary(['permission_id', 'role_id']);
+            $table->foreign('bread_role_id')->references('id')->on('bread_roles')->onDelete('cascade');
+            $table->primary(['bread_permission_id', 'bread_role_id']);
         });
     }
 

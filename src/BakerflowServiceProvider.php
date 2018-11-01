@@ -31,7 +31,7 @@ class BakerflowServiceProvider extends ServiceProvider
     {
         $this->commands(Commands\InstallCommand::class);
         $this->commands(Commands\BakeEntityCommand::class);
-        $this->commands(Commands\BakeControllerCommand::class);
         $this->commands(Commands\BakeControllerWithServiceCommand::class);
+        $this->commands(Commands\BakeMongoEntityCommand::class);
     }
 }

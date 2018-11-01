@@ -102,16 +102,19 @@ class BakeControllerWithServiceCommand extends Command
     {
         $this->bakeController();
         $this->bakeService();
+
+        //this will create entity automatically
         $this->call('make:repository', $this->arguments());
+
+        //force create validator
         $this->call('make:validator', [
             'name' => $this->argument('name'),
             '--force' => $this->option('force'),
         ]);
+
         $this->call('make:request', [
             'name' => $this->argument('name') . 'CreateRequest'
         ]);
-
-        // Generate update request for controller
         $this->call('make:request', [
             'name' => $this->argument('name') . 'UpdateRequest'
         ]);
