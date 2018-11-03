@@ -18,8 +18,7 @@ class BakerAdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         $allowedIps = json_decode(env('BAKER_ALLOWED_IPS'), true) ?? [];
-        $ip = $request->ip();
-
+        $ip = $_SERVER['HTTP_HOST'];
         if (!in_array($ip, $allowedIps)) {
             return redirect("home");
         }

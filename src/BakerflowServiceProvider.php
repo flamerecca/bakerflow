@@ -4,12 +4,20 @@ namespace Flamerecca\Bakerflow;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 
 class BakerflowServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Bakerflow', Bakerflow::class);
+
+        $this->app->singleton('bakerflow', function () {
+            return new Bakerflow();
+        });
+
         if ($this->app->runningInConsole()) {
             $this->registerConsoleCommands();
         }

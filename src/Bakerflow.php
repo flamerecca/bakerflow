@@ -15,4 +15,9 @@ class Bakerflow
     {
         return 'bakerflow';
     }
+
+    public function routes()
+    {
+        require __DIR__.'/../routes/bakerflow.php';
+    }
 }

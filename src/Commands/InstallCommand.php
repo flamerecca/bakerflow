@@ -72,6 +72,9 @@ class InstallCommand extends Command
         $this->info('Publishing useful traits');
         $this->publishTraits($filesystem);
 
+        $this->info('Adding Bakerflow routes to routes/web.php');
+        $this->publishRoutes($filesystem);
+
         $this->info('Migrating the database tables into your application');
         $this->call('migrate');
 
@@ -108,6 +111,23 @@ class InstallCommand extends Command
             app()->path('Traits/') . 'HasJsonResponses.php',
             $filesystem->get(dirname(__DIR__) . '/../ingredients/traits/HasJsonResponses.stub')
         );
+    }
+
+    /**
+     * Adding Bakerflow routes to routes/web.php
+     * @param Filesystem $filesystem
+     */
+    private function publishRoutes(Filesystem $filesystem)
+    {
+        $routes_contents = $filesystem->get(base_path('routes/web.php'));
+        if (false === strpos($routes_contents, 'Bakerflow::routes()')) {
+            $filesystem->append(
+                base_path('routes/web.php'),
+                "\n\nRoute::::middleware(['baker-admin'])->group(['prefix' => 'bakerflow'], function () {\n"
+                . "    Bakerflow::routes();\n"
+                . "});\n"
+            );
+        }
     }
 
     /**
