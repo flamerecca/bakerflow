@@ -17,6 +17,7 @@ class BakerflowServiceProvider extends ServiceProvider
     
     public function boot(Router $router, Dispatcher $event)
     {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'bakerflow');
         if (config('app.env') == 'testing') {
             $this->loadMigrationsFrom(realpath(__DIR__.'/migrations'));
         }
